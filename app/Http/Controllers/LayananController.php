@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
-use App\Models\UnitKerja;
-use App\Models\Jabatan;
-use App\Models\Breaks;
+use App\Models\Layanan;
+// use App\Models\UnitKerja;
+// use App\Models\Jabatan;
+// use App\Models\Breaks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use DB;
 
-class ProductController extends Controller
+class LayananController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,21 +23,22 @@ class ProductController extends Controller
     {
         // $products = Product::all();
         // dd(request('search'));
-        $products = Product::latest();
+        $layanans = Layanan::latest();
+        // dd($layanans);
         // $breaks = Breaks::latest()->orderBy('id', 'ASC')->get();
         // $jabatans = Jabatan::latest()->orderBy('id', 'ASC')->get();
         // $unitkerjas = UnitKerja::latest()->orderBy('id', 'ASC')->get();
         // $breaks = Breaks::latest()->orderByDesc('id')->get();
         // if(request('search')){
         //     $products->where('name', 'like', '%' . request('search') . '%')
-        //              ->orWhere('unitkerja', 'like', '%' . request('search') . '%')
-        //              ->orWhere('detail', 'like', '%' . request('search') . '%');
+        //              ->orWhere('email', 'like', '%' . request('search') . '%')
+        //              ->orWhere('id_kategori', 'like', '%' . request('search') . '%');
         // }
        
         // return view('products.index',compact('products'));
             // ->with('i', (request()->input('page', 1) - 1) * 5);
-            return view('products.index',[
-                "products" => Product::with(['unitkerja','jabatan'])->latest()->filter(request(['search']))
+            return view('layanans.index',[
+                "layanans" => Layanan::latest()->filter(request(['search']))
                 ->paginate(10)->withQueryString()
             ] );
            
@@ -67,12 +68,22 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $jabatans = Jabatan::latest()->orderBy('id', 'ASC')->get();
+        // $jabatans = Jabatan::latest()->orderBy('id', 'ASC')->get();
         // $jabatans = DB::table('m_jabatan')->orderBy('id', 'ASC')->get();
-        $unitkerjas = UnitKerja::latest()->orderBy('id', 'ASC')->get();
-        $breaks = Breaks::latest()->orderBy('id', 'ASC')->get();
+        // $unitkerjas = UnitKerja::latest()->orderBy('id', 'ASC')->get();
+        // $breaks = Breaks::latest()->orderBy('id', 'ASC')->get();
         // echo $jabatans;
-        return view('products.create',compact('breaks','unitkerjas','jabatans'));
+        return view('layanans.create');
+    }
+
+    public function createPIP()
+    {
+        // $jabatans = Jabatan::latest()->orderBy('id', 'ASC')->get();
+        // $jabatans = DB::table('m_jabatan')->orderBy('id', 'ASC')->get();
+        // $unitkerjas = UnitKerja::latest()->orderBy('id', 'ASC')->get();
+        // $breaks = Breaks::latest()->orderBy('id', 'ASC')->get();
+        // echo $jabatans;
+        return view('layanans.createPIP');
     }
   
     /**
@@ -85,26 +96,52 @@ class ProductController extends Controller
     {
         
         $validateData = $request->validate([
+            'id_layanan' => 'required',
             'name' => 'required',
-            'detail' => 'required',
-            'bagian' => 'required',
             'email' => 'required',
-            'unitkerja' => 'required',
-            'jabatan' => 'required',
-            'description' => 'required',
-            'permintaan_at' => 'required',
-            'image' => 'image|file|max:3024',
+            'alamat' => 'required',
+            'job' => 'required',
+            'telephone' => 'required',
+            'alasan' => 'required',
+            // 'informasi' => 'required',
+            // 'tujuan' => 'required',
 
         ]);
-        
-        if($request->file('image')) {
-            $validateData['image'] = $request->file('image')->store('product-image');
-        }
+        // dd($validateData);
+        // if($request->file('image')) {
+        //     $validateData['image'] = $request->file('image')->store('product-image');
+        // }
 
-        Product::create($validateData);
+        Layanan::create($validateData);
    
-        return redirect()->route('products.indexs')
-                        ->with('success','Request created successfully.');
+        return redirect()->route('layanans.indexs')
+                        ->with('success','Keberatan Informasi Publik was successfully Submit');
+    }
+
+    public function storePIP(Request $request)
+    {
+        
+        $validateData = $request->validate([
+            'id_layanan' => 'required',
+            'name' => 'required',
+            'email' => 'required',
+            'alamat' => 'required',
+            'job' => 'required',
+            'telephone' => 'required',
+            // 'alasan' => 'required',
+            'informasi' => 'required',
+            'tujuan' => 'required',
+
+        ]);
+        // dd($validateData);
+        // if($request->file('image')) {
+        //     $validateData['image'] = $request->file('image')->store('product-image');
+        // }
+
+        Layanan::create($validateData);
+   
+        return redirect()->route('layanans.indexs')
+                        ->with('success','Permohonan Informasi Publik was successfully Submit.');
     }
    
     /**
@@ -116,13 +153,13 @@ class ProductController extends Controller
     public function show($id)
     
     {
-        $jabatans = Jabatan::latest()->orderBy('id', 'ASC')->get();
-        $unitkerja = UnitKerja::latest()->orderBy('id', 'ASC')->get();
-        $breaks = Breaks::latest()->orderBy('id', 'ASC')->get();
+        // $jabatans = Jabatan::latest()->orderBy('id', 'ASC')->get();
+        // $unitkerja = UnitKerja::latest()->orderBy('id', 'ASC')->get();
+        // $breaks = Breaks::latest()->orderBy('id', 'ASC')->get();
 
-        $products = Product::findOrFail($id);
+        $layanans = Layanan::findOrFail($id);
         // dd($products);
-        return view('products.show',compact('products'));
+        return view('layanans.show',compact('layanans'));
 
     }
    
@@ -135,12 +172,12 @@ class ProductController extends Controller
     
     public function edit($id)
     {
-        $products = Product::findOrFail($id);
-        $breaks = Breaks::all();
-        $jabatans = Jabatan::all();
-        $unitkerja = UnitKerja::all();
+        $layanans = Layanan::findOrFail($id);
+        // $breaks = Breaks::all();
+        // $jabatans = Jabatan::all();
+        // $unitkerja = UnitKerja::all();
       
-        return view('products.edit',compact('products','breaks','unitkerja','jabatans'));
+        return view('layanans.edit',compact('layanans'));
         // echo $breaks;
     }
   
@@ -196,31 +233,31 @@ class ProductController extends Controller
         // $products->email = $request->email;
         // $products->description = $request->description;
         // $products->permintaan_at = $request->permintaan_at;
+            'id_layanan' => 'required',
             'name' => 'required',
-            'detail' => 'required',
-            'bagian' => 'required',
             'email' => 'required',
-            'unitkerja' => 'required',
-            'jabatan' => 'required',
-            'description' => 'required',
-            'permintaan_at' => 'required',
-            'image' => 'image|file|max:3024',
+            'alamat' => 'required',
+            'job' => 'required',
+            'telephone' => 'required',
+            'alasan' => 'required',
+            'informasi' => 'required',
+            'tujuan' => 'required',
         ]);
 
         $validateData = $products->validate($rules);
 
-        if($products->file('image')) {
-            if($products->oldImage) {
-                Storage::delete($products->oldImage);
-            }
-            $validateData['image'] = $request->file('image')->store('products-image');
-        }
+        // if($products->file('image')) {
+        //     if($products->oldImage) {
+        //         Storage::delete($products->oldImage);
+        //     }
+        //     $validateData['image'] = $request->file('image')->store('products-image');
+        // }
 
         if ( $validateData->save()) {
-            return redirect()->route('products.indexs')
-            ->with('success','Request updated successfully.');    
+            return redirect()->route('layanans.indexs')
+            ->with('success','Layanan Informasi updated successfully.');    
         } else {
-            return redirect()->route('products.edit')->with('error', 'Data failed to update');
+            return redirect()->route('layanans.edit')->with('error', 'Data failed to update');
         }
     }
 
@@ -233,13 +270,13 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $product = Product::findOrFail($id);
-        $product->delete();
-        if($product->oldImage) {
-            Storage::delete($product->image);
-        }
+        $layanan = Layanan::findOrFail($id);
+        $layanan->delete();
+        // if($product->oldImage) {
+        //     Storage::delete($product->image);
+        // }
 
-        return redirect()->route('products.indexs')
-                        ->with('success','Request has been deleted ');
+        return redirect()->route('layanans.indexs')
+                        ->with('success','The Information has been deleted ');
     }
 }

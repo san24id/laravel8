@@ -105,18 +105,47 @@
                     </tr>
                 </table>
             
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    <strong>Jenis Request:</strong>
-                    <select name='detail' class="form-control {{$errors->first('detail') ? "is-invalid" : "" }} " id="detail">
-                        <option value="{{ $products->detail }}">{{ $products->detail  }}</option>
-                        <!-- <option disabled selected>Choose One!</option> -->
-                        @foreach ($breaks as $position)
-                        <option {{ $position->name == $products->detail ? 'selected' : '' }} value="{{ $position->name  }}">{{ $position->name  }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
+            <table width="100%">
+                <tr>
+                    <td><strong>Jenis Request:</strong></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><strong for="image" class="form-label">File Upload</strong></td>
+                    <input type="hidden" name="oldImage" value=" {{ $products->image }}" >
+                    <td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        
+                        <select name='detail' class="form-control {{$errors->first('detail') ? "is-invalid" : "" }} " id="detail">
+                            <option value="{{ $products->detail }}">{{ $products->detail  }}</option>
+                            <!-- <option disabled selected>Choose One!</option> -->
+                            @foreach ($breaks as $position)
+                            <option {{ $position->name == $products->detail ? 'selected' : '' }} value="{{ $position->name  }}">{{ $position->name  }}</option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td>
+                    <td>
+                    <td>
+                    <td width="50%">
+                        @if ($products->image)
+                            <img src="{{ asset('storage/' . $products->image) }}" class="img-preview img-fluid mb-3 col-sm-5 d-block">
+                        @else
+                            <img class="img-preview img-fluid mb-3 col-sm-5 d-block">
+                        @endif
+                            <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" 
+                                   onchange="previewImage()"></td>
+                            @error('image')
+                            <div class="invalid-feedback">
+                                    {{ $message }}
+                            </div> 
+                            @enderror
+                    </td>
+                </tr>
+            </table>
+
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
                     <strong>Description:</strong>
@@ -134,3 +163,23 @@
    <br>
     </form>
 @endsection
+
+<script> 
+
+function previewImage(){
+	const image = document.querySelectot('#image');
+	const imgPreview = document.querySelector('.img-preview');
+	
+	imgPreview.style.display = 'block';
+
+	const oFReader = new FileReader();
+	oFReader.readAsDataURL(image.files[0]);
+
+	oFReader.onload = function(oFREvent) {
+		imgPreview.src = oFREvent.target.result;	
+	}
+
+}
+
+
+</script>

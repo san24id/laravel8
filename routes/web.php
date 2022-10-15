@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\LayananController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UnitKerjaController;
 use App\Http\Controllers\JabatanController;
@@ -59,3 +60,15 @@ Route::post('jabatans/create', [JabatanController::class, 'store'])->name('jabat
 Route::get('jabatans/edit/{id}', [JabatanController::class, 'edit'])->name('jabatans.edit');
 Route::post('jabatans/edit/{id}', [JabatanController::class, 'update'])->name('jabatans.update');
 Route::delete('jabatans/destroy/{id}',[JabatanController::class, 'destroy'])->name('jabatans.destroy');
+
+// Manage layanans
+Route::get('layanans', [LayananController::class, 'index'])->name('layanans.indexs');
+// Route::get('layanans/show', [LayananController::class, 'show'])->name('layanans.show');
+Route::get('layanans/show/{id}', [LayananController::class, 'show'])->name('layanans.show');
+Route::get('layanans/create', [LayananController::class, 'create'])->name('layanans.create');
+Route::get('layanans/createPIP', [LayananController::class, 'createPIP'])->name('layanans.createPIP');
+Route::post('layanans/create', [LayananController::class, 'store'])->name('layanans.store');
+Route::post('layanans/createPIP', [LayananController::class, 'storePIP'])->name('layanans.storePIP');
+Route::get('layanans/edit/{id}', [LayananController::class, 'edit'])->name('layanans.edit');
+Route::post('layanans/edit/{id}', [LayananController::class, 'update'])->name('layanans.update');
+Route::delete('layanans/destroy/{id}',[LayananController::class, 'destroy'])->name('layanans.destroy');

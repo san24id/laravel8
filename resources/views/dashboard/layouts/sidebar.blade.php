@@ -27,6 +27,13 @@
               Jabatan
             </a>
           </li>
+
+          <li class="nav-item">
+            <a class="nav-link {{ Request::is('layanans') ? 'active' : '' }}"" href="{{ route('layanans.indexs') }}">
+              <span data-feather="book-open" class="align-text-bottom"></span>
+              Layanan
+            </a>
+          </li>
         </ul>
         
       </div>

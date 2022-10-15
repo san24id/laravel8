@@ -102,7 +102,8 @@
                         <td>
                         <td><strong for="image" class="form-label">File Upload</strong></td>                        
                     </tr>
-                    <tr><td width="50%"><select class="form-control" id="product" name="detail">
+                    <tr>
+                        <td width="50%"><select class="form-control" id="product" name="detail">
                                 <option disabled selected>Choose One!</option>
                                 @foreach ($breaks as $kategori)
                                 <option value="{{ $kategori->name }}">{{ $kategori->name }}</option>
